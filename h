@@ -36,7 +36,7 @@ while :
 do
 	# draw menu
 	newscreen
-	printf "hello! >w<"
+	printf "hey! >w<"
 	blankline
 	index=0
 	for option in $options
@@ -58,7 +58,6 @@ do
 		"$down") next_option ;;
 		"$enter")
 			cleanup
-
 			case "$selected" in
 				0)
 					while :
@@ -84,7 +83,11 @@ do
 					git commit --allow-empty-message --no-edit
 					git push
 					;;
-				2) exit ;;
+				2)
+					printf "cya! >w<"
+					newline
+					exit
+					;;
 			esac
 			exit
 			;;
