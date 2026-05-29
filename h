@@ -8,8 +8,7 @@ up=$(printf "\033[A")
 selected=0
 settings=$(stty -g)
 
-options="clone ship exit"
-num_options=$(set -- $options; printf "%s" "$#")
+num_options=4
 
 newline() { printf "\r\n"; }
 newscreen() { printf "\033[H\033[J"; }
@@ -25,6 +24,14 @@ cleanup() {
 
 next_option() { selected=$(( (selected + 1) % num_options )); }
 previous_option() { selected=$(( (selected + num_options - 1) % num_options )); }
+option() {
+	case "$1" in
+		0) printf "clone repo" ;;
+		1) printf "ship repo" ;;
+		2) printf "update h" ;;
+		3) printf "exit h" ;;
+	esac
+}
 
 trap cleanup EXIT
 trap "exit" HUP TERM
@@ -39,11 +46,11 @@ do
 	newline
 	newline
 	index=0
-	for option in $options
+	while [ "$index" -lt "$num_options" ]
 	do
 		bullet=" "
 		[ "$index" -eq "$selected" ] && bullet="*"
-		printf "  [%s] %s" "$bullet" "$option"
+		printf "  [%s] %s" "$bullet" "$(option "$index")"
 		newline
 		index=$((index + 1))
 	done
@@ -63,7 +70,10 @@ do
 					while :
 					do
 						newscreen
-						printf "what to clone? >w<\n\n  owner/project: "
+						printf ">w<"
+						newline
+						newline
+						printf "  owner/project: "
 						IFS= read -r repository
 						[ -n "$repository" ] && break
 					done
@@ -84,6 +94,10 @@ do
 					git push
 					;;
 				2)
+					curl -fsSL "https://raw.githubusercontent.com/gregorylimeurhen/h/refs/heads/main/h" -o ./h
+					install h /usr/local/bin
+					;;
+				3)
 					printf "cya! >w<"
 					newline
 					exit

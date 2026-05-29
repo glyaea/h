@@ -23,16 +23,17 @@ Use Up or Down to move, and ENTER to select option:
 ```
 hello! >w<
 
-  [*] clone
-  [ ] ship
-  [ ] exit
+  [*] clone repo
+  [ ] ship repo
+  [ ] update h
+  [ ] exit h
 ```
 
-### `clone`
+### `clone repo`
 
 Enter input:
 ```
-what to clone? >w<
+>w<
 
   owner/project: 
 ```
@@ -44,10 +45,11 @@ git clone https://github.com/foo/bar
 
 Input `foo` runs command:
 ```sh
-git clone "$(curl -s "https://api.github.com/search/repositories?q=foo&per_page=1" | jq -r ".items[0].html_url")"
+git clone "$(curl -s "https://api.github.com/search/repositories?q=foo&per_page=1" \
+| jq -r ".items[0].html_url")"
 ```
 
-### `ship`
+### `ship repo`
 
 Runs commands:
 ```sh
@@ -56,7 +58,15 @@ git commit --allow-empty-message --no-edit
 git push
 ```
 
-### `exit`
+### `update h`
+
+Runs commands:
+```sh
+curl -fsSL "https://raw.githubusercontent.com/gregorylimeurhen/h/refs/heads/main/h" -o ./h
+install h /usr/local/bin
+```
+
+### `exit h`
 
 Runs command:
 ```sh
