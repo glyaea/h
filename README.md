@@ -93,6 +93,20 @@ git clone "$(curl -s "https://api.github.com/search/repositories?q=foo&per_page=
 | jq -r ".items[0].html_url")"
 ```
 
+### `lexorder string`
+
+Enter input:
+```
+owo
+
+  string: 
+```
+
+Input `foo` runs command:
+```
+printf %s foo | grep -o . | sort | paste -sd ""
+```
+
 ### `ship repo`
 
 Runs commands:

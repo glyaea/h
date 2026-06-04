@@ -8,10 +8,10 @@ up=$(printf "\033[A")
 selected=0
 settings=$(stty -g)
 
-num_options=5
+num_options=6
 
 newline() { printf "\r\n"; }
-newscreen() { printf "\033[H\033[J"; }
+newscreen() { printf "\033[H"; }
 
 hidecursor() { printf "\033[?25l"; }
 showcursor() { printf "\033[?25h"; }
@@ -28,9 +28,10 @@ option() {
 	case "$1" in
 		0) printf "clean disk" ;;
 		1) printf "clone repo" ;;
-		2) printf "ship repo" ;;
-		3) printf "update h" ;;
-		4) printf "quit h" ;;
+		2) printf "lexorder string" ;;
+		3) printf "ship repo" ;;
+		4) printf "update h" ;;
+		5) printf "quit h" ;;
 	esac
 }
 
@@ -123,15 +124,29 @@ do
 					esac
 					;;
 				2)
+					while :
+					do
+						newscreen
+						printf "owo"
+						newline
+						newline
+						printf "  string: "
+						IFS= read -r string
+						[ -n "$string" ] && break
+					done
+					printf "%s" "$string" | grep -o . | sort | paste -sd ""
+					newline
+					;;
+				3)
 					git add .
 					git commit --allow-empty-message --no-edit
 					git push
 					;;
-				3)
+				4)
 					curl -fsSL "https://raw.githubusercontent.com/gregorylimeurhen/h/refs/heads/main/h" -o ./h
 					install h /usr/local/bin
 					;;
-				4)
+				5)
 					printf ">w<"
 					newline
 					exit
