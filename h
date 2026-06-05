@@ -134,7 +134,7 @@ do
 						IFS= read -r string
 						[ -n "$string" ] && break
 					done
-					printf "%s" "$string" | grep -o . | sort | paste -sd ""
+					printf "%s" "$string" | grep -o . | sort | tr -d "\n"
 					newline
 					;;
 				3)
