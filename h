@@ -11,7 +11,7 @@ settings=$(stty -g)
 num_options=6
 
 newline() { printf "\r\n"; }
-newscreen() { printf "\033[H"; }
+newscreen() { printf "\033[H\033[J"; }
 
 hidecursor() { printf "\033[?25l"; }
 showcursor() { printf "\033[?25h"; }
