@@ -10,8 +10,8 @@ import tty
 class Utility:
 	ENTER = "\r"
 	DOWN = "\033[B"
+	SIGINT = "\x03"
 	UP = "\033[A"
-	Q = "q"
 
 	@staticmethod
 	def clear_screen():
@@ -98,10 +98,10 @@ if __name__ == "__main__":
 			bullet = "*" if index == selected else " "
 			print(f"[{bullet}] {option[0]}\r")
 		keypress = sys.stdin.read(1)
+		if keypress == Utility.SIGINT:
+			sys.exit()
 		if keypress == "\033":
 			keypress += sys.stdin.read(2)
-		if keypress == Utility.Q:
-			sys.exit()
 		if keypress == Utility.UP:
 			selected = (selected + len(options) - 1) % len(options)
 		if keypress == Utility.DOWN:
