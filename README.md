@@ -1,25 +1,30 @@
-# h
+<center>
+<pre>
+      ___     
+     /\  \    
+     \:\  \   
+      \:\  \  
+  ___ /::\  \ 
+ /\  /:/\:\__\
+ \:\/:/  \/__/
+  \::/__/     
+   \:\  \     
+    \:\__\    
+     \/__/    
+</pre>
+</center>
 
 A minimal program for daily tasks on MacOS.
 
-## Installation
-
-Clone repository.
-
-Run command:
 ```sh
-cd h
+# Install h
 install h /usr/local/bin
-```
 
-## Uninstallation
-
-Run command:
-```sh
+# Uninstall h
 rm /usr/local/bin/h
 ```
 
-## Usage
+### Usage
 
 Run command:
 ```sh
@@ -35,7 +40,7 @@ Use Up, Down, and/or Enter to select option:
 [ ] ship repo
 ```
 
-### `alphabetize string`
+**`alphabetize string`**
 
 Enter input:
 ```
@@ -43,11 +48,11 @@ string:
 ```
 
 Input `foo` runs command:
-```
+```sh
 printf %s foo | grep -o . | sort | paste -sd ""
 ```
 
-### `clean cache`
+**`clean cache`**
 
 Runs commands:
 ```sh
@@ -57,7 +62,7 @@ npm cache clean --force
 uv cache clean
 ```
 
-### `clone repo`
+**`clone repo`**
 
 Enter input:
 ```
@@ -69,7 +74,7 @@ Input `foo/bar` runs command:
 git clone https://github.com/foo/bar
 ```
 
-### `find repo`
+**`find repo`**
 
 Enter input:
 ```
@@ -82,7 +87,7 @@ curl -s "https://api.github.com/search/repositories?q=foo&per_page=1" \
 | jq -r ".items[0].html_url"
 ```
 
-### `ship repo`
+**`ship repo`**
 
 Runs commands:
 ```sh
