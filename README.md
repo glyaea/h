@@ -28,14 +28,26 @@ h
 
 Use Up, Down, and/or Enter to select option:
 ```
-[*] clean disk
+[*] alphabetize string
+[ ] clean cache
 [ ] clone repo
 [ ] find repo
-[ ] lex-order string
-[ ] silent-ship repo
+[ ] ship repo
 ```
 
-### `clean disk`
+### `alphabetize string`
+
+Enter input:
+```
+string: 
+```
+
+Input `foo` runs command:
+```
+printf %s foo | grep -o . | sort | paste -sd ""
+```
+
+### `clean cache`
 
 Runs commands:
 ```sh
@@ -70,19 +82,7 @@ curl -s "https://api.github.com/search/repositories?q=foo&per_page=1" \
 | jq -r ".items[0].html_url"
 ```
 
-### `lex-order string`
-
-Enter input:
-```
-string: 
-```
-
-Input `foo` runs command:
-```
-printf %s foo | grep -o . | sort | paste -sd ""
-```
-
-### `silent-ship repo`
+### `ship repo`
 
 Runs commands:
 ```sh

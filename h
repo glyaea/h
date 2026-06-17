@@ -34,7 +34,7 @@ class Utility:
 		print("\033[?25h", end="")
 
 
-def clean_disk():
+def clean_cache():
 	subprocess.run(["brew", "cleanup", "--prune=all"])
 	subprocess.run(["conda", "clean", "--all"])
 	subprocess.run(["npm", "cache", "clean", "--force"])
@@ -62,7 +62,7 @@ def find_repo():
 	subprocess.run(["jq", "-r", ".items[0].html_url"], input=response.stdout, text=True)
 
 
-def lex_order_string():
+def alphabetize_string():
 	while True:
 		string = get_input("string:")
 		if string:
@@ -70,7 +70,7 @@ def lex_order_string():
 	print("".join(sorted(string)))
 
 
-def silent_ship_repo():
+def ship_repo():
 	subprocess.run(["git", "add", "."])
 	subprocess.run(["git", "commit", "--allow-empty-message", "--no-edit"])
 	subprocess.run(["git", "push"])
@@ -78,11 +78,11 @@ def silent_ship_repo():
 
 if __name__ == "__main__":
 	options = [
-		("clean disk", clean_disk),
+		("alphabetize string", alphabetize_string),
+		("clean cache", clean_cache),
 		("clone repo", clone_repo),
 		("find repo", find_repo),
-		("lex-order string", lex_order_string),
-		("silent-ship repo", silent_ship_repo)
+		("ship repo", ship_repo)
 	]
 	selected = 0
 	settings = termios.tcgetattr(sys.stdin)
