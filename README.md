@@ -17,7 +17,8 @@ Run command:
 h
 ```
 
-Use Up, Down, and/or Enter to select option:
+Use <kbd>Up</kbd>, <kbd>Down</kbd>, or <kbd>Enter</kbd> to select option,
+and <kbd>q</kbd> to quit menu:
 ```
 [*] alphabetize string
 [ ] clean cache
