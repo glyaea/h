@@ -34,6 +34,14 @@ class Utility:
 		print("\033[?25h", end="")
 
 
+def alphabetize_string():
+	while True:
+		string = get_input("string:")
+		if string:
+			break
+	print("".join(sorted(string)))
+
+
 def clean_cache():
 	subprocess.run(["brew", "cleanup", "--prune=all"])
 	subprocess.run(["conda", "clean", "--all"])
@@ -60,14 +68,6 @@ def find_repo():
 		text=True
 	)
 	subprocess.run(["jq", "-r", ".items[0].html_url"], input=response.stdout, text=True)
-
-
-def alphabetize_string():
-	while True:
-		string = get_input("string:")
-		if string:
-			break
-	print("".join(sorted(string)))
 
 
 def ship_repo():
