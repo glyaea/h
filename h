@@ -36,7 +36,7 @@ class Utility:
 
 def alphabetize_string():
 	while True:
-		string = get_input("string:")
+		string = Utility.get_input("string:")
 		if string:
 			break
 	print("".join(sorted(string)))
@@ -51,7 +51,7 @@ def clean_cache():
 
 def clone_repo():
 	while True:
-		repository = get_input("owner/project:")
+		repository = Utility.get_input("owner/project:")
 		if repository:
 			break
 	subprocess.run(["git", "clone", f"https://github.com/{repository}"])
@@ -59,7 +59,7 @@ def clone_repo():
 
 def find_repo():
 	while True:
-		query = get_input("query:")
+		query = Utility.get_input("query:")
 		if query:
 			break
 	response = subprocess.run(
