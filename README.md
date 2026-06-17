@@ -1,18 +1,4 @@
-<center>
-<pre>
-      ___     
-     /\  \    
-     \:\  \   
-      \:\  \  
-  ___ /::\  \ 
- /\  /:/\:\__\
- \:\/:/  \/__/
-  \::/__/     
-   \:\  \     
-    \:\__\    
-     \/__/    
-</pre>
-</center>
+# h
 
 A minimal program for daily tasks on MacOS.
 
