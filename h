@@ -1,158 +1,110 @@
-#!/bin/sh
+#!/usr/bin/env python3
+import atexit
+import signal
+import subprocess
+import sys
+import termios
+import tty
 
-down=$(printf "\033[B")
-enter=$(printf "\r")
-escape=$(printf "\033")
-up=$(printf "\033[A")
 
-selected=0
-settings=$(stty -g)
+class Utility:
+	UP = "\033[A"
+	DOWN = "\033[B"
+	ENTER = "\r"
 
-num_options=6
+	@staticmethod
+	def clear_screen():
+		print("\033[H\033[J", end="")
 
-newline() { printf "\r\n"; }
-newscreen() { printf "\033[H\033[J"; }
+	@staticmethod
+	def get_input(prompt):
+		return input(f"{prompt} ")
 
-hidecursor() { printf "\033[?25l"; }
-showcursor() { printf "\033[?25h"; }
+	@staticmethod
+	def hide_cursor():
+		print("\033[?25l", end="")
 
-cleanup() {
-	showcursor
-	stty "$settings"
-	newline
-}
+	@staticmethod
+	def restore_terminal(settings):
+		Utility.show_cursor()
+		termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
 
-next_option() { selected=$(( (selected + 1) % num_options )); }
-previous_option() { selected=$(( (selected + num_options - 1) % num_options )); }
-option() {
-	case "$1" in
-		0) printf "clean disk" ;;
-		1) printf "clone repo" ;;
-		2) printf "lexorder string" ;;
-		3) printf "ship repo" ;;
-		4) printf "update h" ;;
-		5) printf "quit h" ;;
-	esac
-}
+	@staticmethod
+	def show_cursor():
+		print("\033[?25h", end="")
 
-trap cleanup EXIT
-trap "exit" HUP TERM
-stty raw -echo
-hidecursor
 
-while :
-do
-	# draw menu
-	newscreen
-	printf ">w<"
-	newline
-	newline
-	index=0
-	while [ "$index" -lt "$num_options" ]
-	do
-		bullet=" "
-		[ "$index" -eq "$selected" ] && bullet="*"
-		printf "  [%s] %s" "$bullet" "$(option "$index")"
-		newline
-		index=$((index + 1))
-	done
+def clean_disk():
+	subprocess.run(["brew", "cleanup", "--prune=all"])
+	subprocess.run(["conda", "clean", "--all"])
+	subprocess.run(["npm", "cache", "clean", "--force"])
+	subprocess.run(["uv", "cache", "clean"])
 
-	# read keypress
-	keypress=$(dd bs=1 count=1 2>/dev/null)
-	[ "$keypress" = "$escape" ] && keypress="$keypress$(dd bs=1 count=2 2>/dev/null)"
 
-	# act on keypress
-	case "$keypress" in
-		"$up") previous_option ;;
-		"$down") next_option ;;
-		"$enter")
-			cleanup
-			case "$selected" in
-				0)
-					brew cleanup --prune=all
-					conda clean --all
-					npm cache clean --force
-					set -- \
-						"$HOME/.android/avd" \
-						"$HOME/.android/cache" \
-						"$HOME/.cache" \
-						"$HOME/.thumbnails" \
-						"$HOME/Library/Application Support/Code/Cache" \
-						"$HOME/Library/Application Support/Code/CachedData" \
-						"$HOME/Library/Application Support/Slack/Cache" \
-						"$HOME/Library/Developer/Xcode/Archives" \
-						"$HOME/Library/Developer/Xcode/DerivedData" \
-						"$HOME/Library/Developer/Xcode/iOS DeviceSupport"
-					du -sh "$@" 2>/dev/null | sort -hr
-					while :
-					do
-						newline
-						printf "owo"
-						newline
-						newline
-						printf "  y/n: "
-						IFS= read -r answer
-						case "$answer" in
-							y)
-								rm -rf "$@"
-								break
-								;;
-							n) exit ;;
-						esac
-					done
-					;;
-				1)
-					while :
-					do
-						newscreen
-						printf "owo"
-						newline
-						newline
-						printf "  owner/project: "
-						IFS= read -r repository
-						[ -n "$repository" ] && break
-					done
-					case "$repository" in
-						*/*) git clone "https://github.com/$repository" ;;
-						*)
-							api=https://api.github.com/search/repositories
-							git clone "$(
-								curl -s "$api?q=$repository&per_page=1" |
-								jq -r ".items[0].html_url"
-							)"
-							;;
-					esac
-					;;
-				2)
-					while :
-					do
-						newscreen
-						printf "owo"
-						newline
-						newline
-						printf "  string: "
-						IFS= read -r string
-						[ -n "$string" ] && break
-					done
-					printf "%s" "$string" | grep -o . | sort | tr -d "\n"
-					newline
-					;;
-				3)
-					git add .
-					git commit --allow-empty-message --no-edit
-					git push
-					;;
-				4)
-					curl -fsSL "https://raw.githubusercontent.com/gregorylimeurhen/h/refs/heads/main/h" -o ./h
-					install h /usr/local/bin
-					;;
-				5)
-					printf ">w<"
-					newline
-					exit
-					;;
-			esac
-			exit
-			;;
-	esac
-done
+def clone_repo():
+	while True:
+		repository = get_input("owner/project:")
+		if repository:
+			break
+	subprocess.run(["git", "clone", f"https://github.com/{repository}"])
+
+
+def find_repo():
+	while True:
+		query = get_input("query:")
+		if query:
+			break
+	response = subprocess.run(
+		["curl", "-s", f"https://api.github.com/search/repositories?q={query}&per_page=1"],
+		capture_output=True,
+		text=True
+	)
+	subprocess.run(["jq", "-r", ".items[0].html_url"], input=response.stdout, text=True)
+
+
+def lex_order_string():
+	while True:
+		string = get_input("string:")
+		if string:
+			break
+	print("".join(sorted(string)))
+
+
+def silent_ship_repo():
+	subprocess.run(["git", "add", "."])
+	subprocess.run(["git", "commit", "--allow-empty-message", "--no-edit"])
+	subprocess.run(["git", "push"])
+
+
+if __name__ == "__main__":
+	options = [
+		("clean disk", clean_disk),
+		("clone repo", clone_repo),
+		("find repo", find_repo),
+		("lex-order string", lex_order_string),
+		("silent-ship repo", silent_ship_repo)
+	]
+	selected = 0
+	settings = termios.tcgetattr(sys.stdin)
+	atexit.register(Utility.restore_terminal, settings)
+	signal.signal(signal.SIGHUP, lambda signum, frame: sys.exit())
+	signal.signal(signal.SIGTERM, lambda signum, frame: sys.exit())
+	tty.setraw(sys.stdin)
+	Utility.hide_cursor()
+	while True:
+		Utility.clear_screen()
+		for index, option in enumerate(options):
+			bullet = "*" if index == selected else " "
+			print(f"[{bullet}] {option[0]}\r")
+		keypress = sys.stdin.read(1)
+		if keypress == "\033":
+			keypress += sys.stdin.read(2)
+		if keypress == Utility.UP:
+			selected = (selected + len(options) - 1) % len(options)
+		if keypress == Utility.DOWN:
+			selected = (selected + 1) % len(options)
+		if keypress == Utility.ENTER:
+			Utility.restore_terminal(settings)
+			Utility.clear_screen()
+			options[selected][1]()
+			sys.exit()
