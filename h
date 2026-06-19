@@ -71,6 +71,11 @@ def find_repo():
 	subprocess.run(["jq", "-r", ".items[0].html_url"], input=response.stdout, text=True)
 
 
+def rebase_branch():
+	subprocess.run(["git", "pull", "--rebase"])
+	subprocess.run(["git", "push"])
+
+
 def ship_repo():
 	subprocess.run(["git", "add", "."])
 	subprocess.run(["git", "commit", "--allow-empty-message", "--no-edit"])
@@ -83,6 +88,7 @@ if __name__ == "__main__":
 		("clean cache", clean_cache),
 		("clone repo", clone_repo),
 		("find repo", find_repo),
+		("rebase branch", rebase_branch),
 		("ship repo", ship_repo)
 	]
 	selected = 0

@@ -1,6 +1,6 @@
 # h
 
-A minimal program for daily tasks on MacOS.
+A simple program for daily tasks on MacOS.
 
 ```sh
 # Install h
@@ -23,6 +23,7 @@ Use <kbd>Up</kbd>, <kbd>Down</kbd>, or <kbd>Enter</kbd> to select option:
 [ ] clean cache
 [ ] clone repo
 [ ] find repo
+[ ] rebase branch
 [ ] ship repo
 ```
 
@@ -71,6 +72,14 @@ Input `foo` runs command:
 ```sh
 curl -s "https://api.github.com/search/repositories?q=foo&per_page=1" \
 | jq -r ".items[0].html_url"
+```
+
+**`rebase branch`**
+
+Runs commands:
+```sh
+git pull --rebase
+git push
 ```
 
 **`ship repo`**
