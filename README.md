@@ -2,11 +2,17 @@
 
 ## Boarding
 
-```sh
-# Install h
-install h /usr/local/bin
+### Installation
 
-# Uninstall h
+Run command:
+```sh
+install h /usr/local/bin
+```
+
+### Uninstallation
+
+Run command:
+```
 rm /usr/local/bin/h
 ```
 
@@ -27,7 +33,7 @@ Use <kbd>Up</kbd>, <kbd>Down</kbd>, or <kbd>Enter</kbd> to select option:
 [ ] ship repo
 ```
 
-**`alphabetize string`**
+### `alphabetize string`
 
 Enter input:
 ```
@@ -39,7 +45,7 @@ Input `foo` runs command:
 printf %s foo | grep -o . | sort | paste -sd ""
 ```
 
-**`clean cache`**
+### `clean cache`
 
 Runs commands:
 ```sh
@@ -49,7 +55,7 @@ npm cache clean --force
 uv cache clean
 ```
 
-**`clone repo`**
+### `clone repo`
 
 Enter input:
 ```
@@ -61,7 +67,7 @@ Input `foo/bar` runs command:
 git clone https://github.com/foo/bar
 ```
 
-**`find repo`**
+### `find repo`
 
 Enter input:
 ```
@@ -74,7 +80,7 @@ curl -s "https://api.github.com/search/repositories?q=foo&per_page=1" \
 | jq -r ".items[0].html_url"
 ```
 
-**`rebase branch`**
+### `rebase branch`
 
 Runs commands:
 ```sh
@@ -82,7 +88,7 @@ git pull --rebase
 git push
 ```
 
-**`ship repo`**
+### `ship repo`
 
 Runs commands:
 ```sh
