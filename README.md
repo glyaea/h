@@ -1,6 +1,6 @@
 # h
 
-A simple program for daily tasks on MacOS.
+## Boarding
 
 ```sh
 # Install h
@@ -10,7 +10,7 @@ install h /usr/local/bin
 rm /usr/local/bin/h
 ```
 
-### Usage
+## Usage
 
 Run command:
 ```sh
